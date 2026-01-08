@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Kembang Rempah</title>
+    <meta name="description" content="Learn about Kembang Rempah' heritage, commitment to quality, and Indonesia's legendary spice legacy. Discover our story and sustainable practices.">
+    
+    <!-- index.html -->
+<meta property="og:title" content="Kembang Rempah - Premium Indonesian Spice Exporter">
+<meta property="og:description" content="Direct sourcing from Indonesia's legendary Spice Islands. ISO 22000 certified. Export to 45+ countries.">
+<meta property="og:image" content="https://kembangrempah.com/resources/hero-spices.jpg">
+<meta property="og:url" content="https://kembangrempah.com/">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Add to all other pages with appropriate titles/descriptions -->
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#1B4332',
+                        'terracotta': '#D2691E',
+                        'gold': '#B8860B',
+                        'cream': '#F5F5DC',
+                        'charcoal': '#2F2F2F'
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'body': ['Inter', 'sans-serif'],
+                        'accent': ['Crimson Text', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom styles */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .reveal.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .navigation {
+            backdrop-filter: blur(20px);
+            background: rgba(245, 245, 220, 0.9);
+            border-bottom: 1px solid rgba(27, 67, 50, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #B8860B;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .hero-about {
+            background: linear-gradient(135deg, rgba(27, 67, 50, 0.8), rgba(210, 105, 30, 0.6)), url('resources/farmer-plantation.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 60vh;
+            position: relative;
+        }
+        
+        .timeline {
+            position: relative;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #B8860B, #D2691E);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .timeline-item.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 16px;
+            height: 16px;
+            background: #B8860B;
+            border: 4px solid #F5F5DC;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .timeline-content {
+            background: rgba(245, 245, 220, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 45%;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+        }
+        
+        .indonesia-map {
+            position: relative;
+            background: url('resources/indonesia-map.jpg') center/contain no-repeat;
+            min-height: 500px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .map-region {
+            position: absolute;
+            cursor: pointer;
+        }
+        
+        .region-marker {
+            width: 20px;
+            height: 20px;
+            background: #B8860B;
+            border: 3px solid #F5F5DC;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+        }
+        
+        .map-region:hover .region-marker {
+            transform: scale(1.3);
+            background: #D2691E;
+        }
+        
+        .region-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(27, 67, 50, 0.95);
+            color: #F5F5DC;
+            padding: 1rem;
+            border-radius: 8px;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+        }
+        
+        .region-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: rgba(27, 67, 50, 0.95);
+        }
+        
+        .map-region:hover .region-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        
+        .certification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .certification-card {
+            background: rgba(245, 245, 220, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .certification-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .certification-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1B4332, #B8860B);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: #F5F5DC;
+        }
+        
+        .stats-chart {
+            background: rgba(245, 245, 220, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 2rem;
+            }
+            
+            .timeline-item::before {
+                left: 2rem;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 4rem);
+                margin-left: 4rem !important;
+            }
+            
+            .indonesia-map {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="font-body text-charcoal bg-cream">
+    <!-- Navigation -->
+    <nav class="navigation fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="resources/new-logo.png" alt="Kembang Rempah Logo" class="w-10 h-10 rounded-full object-contain">
+                <span class="font-display font-bold text-xl text-forest">Kembang Rempah</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="nav-link text-forest hover:text-gold transition-colors">Home</a>
+                <a href="products.html" class="nav-link text-forest hover:text-gold transition-colors">Products</a>
+                <a href="about.html" class="nav-link text-gold">About</a>
+                <a href="contact.html" class="nav-link text-forest hover:text-gold transition-colors">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="p-2 text-forest hover:text-gold transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </button>
+                <button class="mobile-menu-btn md:hidden p-2 text-forest">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden hidden absolute top-full left-0 right-0 bg-cream border-t border-forest/10">
+            <div class="px-6 py-4 space-y-4">
+                <a href="index.html" class="block text-forest hover:text-gold transition-colors">Home</a>
+                <a href="products.html" class="block text-forest hover:text-gold transition-colors">Products</a>
+                <a href="about.html" class="block text-gold">About</a>
+                <a href="contact.html" class="block text-forest hover:text-gold transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-about flex items-center justify-center relative">
+        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+            <h1 class="font-display text-5xl md:text-6xl font-bold text-cream mb-6 leading-tight">
+                Our Heritage
+            </h1>
+            <p class="text-xl md:text-2xl text-cream/90 max-w-3xl mx-auto leading-relaxed">
+                Continuing Indonesia's legendary spice legacy with modern excellence, 
+                sustainability, and unwavering commitment to quality.
+            </p>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <div class="px-6 py-4 bg-cream border-b border-forest/10">
+        <div class="max-w-7xl mx-auto">
+            <nav class="flex items-center space-x-2 text-sm">
+                <a href="index.html" class="text-forest hover:text-gold transition-colors">Home</a>
+                <span class="text-charcoal/50">/</span>
+                <span class="text-charcoal/80">About</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Company Story Section -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">
+                        Our Story
+                    </h2>
+                    <div class="space-y-6 text-lg text-charcoal/80 leading-relaxed">
+                        <p>
+                            Founded in 1999, Kembang Rempah emerged from a deep passion for Indonesia's 
+                            rich spice heritage and a vision to share these extraordinary flavors with the world. 
+                            What began as a small family operation has grown into one of Indonesia's most 
+                            trusted spice exporters.
+                        </p>
+                        <p>
+                            Our name, "Kembang" reflects our commitment to the entire Indonesian archipelago 
+                            - from the cinnamon forests of Sumatra to the clove plantations of Sulawesi, 
+                            and the legendary nutmeg islands of Maluku. We work directly with over 1,200 
+                            farming families, ensuring fair trade practices and sustainable cultivation methods.
+                        </p>
+                        <p>
+                            Today, we export more than 15,000 tons of premium spices annually to 45 countries 
+                            worldwide, maintaining the same dedication to quality and authenticity that has 
+                            defined our journey from the beginning.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="reveal">
+                    <img src="resources/quality-control.jpg" alt="Quality Control Process" 
+                         class="rounded-2xl shadow-2xl w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-20 px-6 bg-gradient-to-b from-cream to-cream/95">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">
+                    Our Journey
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto">
+                    From humble beginnings to becoming Indonesia's premier spice exporter
+                </p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="font-display text-2xl font-semibold text-forest mb-3">1999 - Foundation</h3>
+                        <p class="text-charcoal/80 leading-relaxed">
+                            Kembang Rempah was founded by the Wijaya family in Jakarta with a mission to 
+                            bring authentic Indonesian spices to international markets. Starting with just 
+                            three spice varieties and a handful of local farmers.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="font-display text-2xl font-semibold text-forest mb-3">2005 - First Export</h3>
+                        <p class="text-charcoal/80 leading-relaxed">
+                            Our first major export shipment of 50 tons of premium cloves to Europe marked 
+                            the beginning of our international expansion. This milestone established our 
+                            reputation for quality and reliability.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="font-display text-2xl font-semibold text-forest mb-3">2010 - Quality Certification</h3>
+                        <p class="text-charcoal/80 leading-relaxed">
+                            Achieved ISO 22000 and HACCP certifications, demonstrating our commitment to 
+                            food safety and quality management. This opened doors to premium markets in 
+                            North America and Europe.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="font-display text-2xl font-semibold text-forest mb-3">2015 - Sustainable Partnerships</h3>
+                        <p class="text-charcoal/80 leading-relaxed">
+                            Launched our farmer partnership program, working directly with over 500 farming 
+                            families to ensure sustainable practices and fair trade. Introduced organic 
+                            certification for select products.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="font-display text-2xl font-semibold text-forest mb-3">2020 - Digital Transformation</h3>
+                        <p class="text-charcoal/80 leading-relaxed">
+                            Embraced digital innovation with advanced tracking systems, online ordering 
+                            platform, and real-time quality monitoring. Expanded to serve 35 countries 
+                            despite global challenges.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3 class="font-display text-2xl font-semibold text-forest mb-3">2025 - Global Leader</h3>
+                        <p class="text-charcoal/80 leading-relaxed">
+                            Today, we export over 15,000 tons annually to 45 countries, working with 
+                            1,200+ farming families. Our commitment to quality, sustainability, and 
+                            authentic Indonesian flavors remains stronger than ever.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Indonesia Map Section -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">
+                    Spice Regions of Indonesia
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto">
+                    Explore the diverse regions that make Indonesia the legendary Spice Islands
+                </p>
+            </div>
+            
+            <div class="indonesia-map reveal">
+                <!-- Regions will be added by JavaScript -->
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                <div class="bg-forest text-cream p-6 rounded-2xl text-center reveal">
+                    <h3 class="font-display text-xl font-semibold mb-3">Sumatra</h3>
+                    <p class="text-cream/80 text-sm mb-4">Known for cinnamon and black pepper</p>
+                    <div class="text-2xl font-bold text-gold">35%</div>
+                    <div class="text-xs text-cream/60">of total production</div>
+                </div>
+                
+                <div class="bg-terracotta text-cream p-6 rounded-2xl text-center reveal">
+                    <h3 class="font-display text-xl font-semibold mb-3">Java</h3>
+                    <p class="text-cream/80 text-sm mb-4">Turmeric, ginger, and cardamom</p>
+                    <div class="text-2xl font-bold text-gold">28%</div>
+                    <div class="text-xs text-cream/60">of total production</div>
+                </div>
+                
+                <div class="bg-gold text-cream p-6 rounded-2xl text-center reveal">
+                    <h3 class="font-display text-xl font-semibold mb-3">Sulawesi</h3>
+                    <p class="text-cream/80 text-sm mb-4">Premium cloves and vanilla</p>
+                    <div class="text-2xl font-bold">22%</div>
+                    <div class="text-xs text-cream/60">of total production</div>
+                </div>
+                
+                <div class="bg-forest text-cream p-6 rounded-2xl text-center reveal">
+                    <h3 class="font-display text-xl font-semibold mb-3">Maluku</h3>
+                    <p class="text-cream/80 text-sm mb-4">Legendary nutmeg and mace</p>
+                    <div class="text-2xl font-bold text-gold">15%</div>
+                    <div class="text-xs text-cream/60">of total production</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quality & Certifications Section -->
+    <section class="py-20 px-6 bg-gradient-to-b from-cream to-cream/95">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">
+                    Quality & Certifications
+                </h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto">
+                    Our commitment to excellence is certified by international standards
+                </p>
+            </div>
+            
+            <div class="certification-grid">
+                <div class="certification-card reveal">
+                    <div class="certification-icon">ISO</div>
+                    <h3 class="font-display text-xl font-semibold text-forest mb-3">ISO 22000:2018</h3>
+                    <p class="text-charcoal/80 text-sm">
+                        International food safety management system certification ensuring 
+                        the highest standards of quality and safety.
+                    </p>
+                </div>
+                
+                <div class="certification-card reveal">
+                    <div class="certification-icon">HAC</div>
+                    <h3 class="font-display text-xl font-semibold text-forest mb-3">HACCP Certified</h3>
+                    <p class="text-charcoal/80 text-sm">
+                        Hazard Analysis Critical Control Points certification for systematic 
+                        approach to food safety management.
+                    </p>
+                </div>
+                
+                <div class="certification-card reveal">
+                    <div class="certification-icon">ORG</div>
+                    <h3 class="font-display text-xl font-semibold text-forest mb-3">Organic Certified</h3>
+                    <p class="text-charcoal/80 text-sm">
+                        USDA and EU organic certification for sustainably grown spices 
+                        without synthetic pesticides or fertilizers.
+                    </p>
+                </div>
+                
+                <div class="certification-card reveal">
+                    <div class="certification-icon">HAL</div>
+                    <h3 class="font-display text-xl font-semibold text-forest mb-3">Halal Certified</h3>
+                    <p class="text-charcoal/80 text-sm">
+                        Indonesian Ulema Council (MUI) halal certification meeting Islamic 
+                        dietary requirements and standards.
+                    </p>
+                </div>
+                
+                <div class="certification-card reveal">
+                    <div class="certification-icon">FT</div>
+                    <h3 class="font-display text-xl font-semibold text-forest mb-3">Fair Trade</h3>
+                    <p class="text-charcoal/80 text-sm">
+                        Fair trade certification ensuring equitable partnerships with 
+                        farming communities and sustainable practices.
+                    </p>
+                </div>
+                
+                <div class="certification-card reveal">
+                    <div class="certification-icon">GMP</div>
+                    <h3 class="font-display text-xl font-semibold text-forest mb-3">GMP Certified</h3>
+                    <p class="text-charcoal/80 text-sm">
+                        Good Manufacturing Practices certification ensuring consistent 
+                        quality and safety in production processes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sustainability Section -->
+    <section class="py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6">
+                        Sustainable Partnerships
+                    </h2>
+                    <div class="space-y-6 text-lg text-charcoal/80 leading-relaxed">
+                        <p>
+                            Our commitment extends beyond quality spices to the wellbeing of our farming 
+                            communities and the preservation of Indonesia's rich agricultural heritage. 
+                            We work directly with over 1,200 farming families across the archipelago.
+                        </p>
+                        <p>
+                            Through our sustainable partnership program, we provide technical assistance, 
+                            fair pricing, and long-term contracts that ensure stable incomes for farming 
+                            communities. This approach has helped preserve traditional cultivation methods 
+                            while improving yields and quality.
+                        </p>
+                        <p>
+                            Our organic certification program supports farmers in transitioning to 
+                            sustainable practices, reducing environmental impact while meeting growing 
+                            global demand for organic spices. We believe that what's good for the planet 
+                            is good for business.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="reveal">
+                    <div class="stats-chart">
+                        <h3 class="font-display text-2xl font-semibold text-forest mb-6 text-center">
+                            Our Impact
+                        </h3>
+                        <div id="impact-chart" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Reach Section -->
+    <section class="py-20 px-6 bg-gradient-to-r from-forest to-forest/90 text-cream">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 reveal">
+                Global Reach, Local Heart
+            </h2>
+            <p class="text-xl mb-12 text-cream/90 max-w-3xl mx-auto reveal">
+                From our roots in Indonesia to kitchens and factories worldwide, 
+                we bring authentic flavors to every corner of the globe.
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="reveal">
+                    <div class="text-5xl font-bold text-gold mb-2">45</div>
+                    <div class="text-lg font-semibold mb-2">Countries Served</div>
+                    <div class="text-cream/80">Across 6 continents</div>
+                </div>
+                
+                <div class="reveal">
+                    <div class="text-5xl font-bold text-gold mb-2">15,000+</div>
+                    <div class="text-lg font-semibold mb-2">Tons Exported Annually</div>
+                    <div class="text-cream/80">Premium quality spices</div>
+                </div>
+                
+                <div class="reveal">
+                    <div class="text-5xl font-bold text-gold mb-2">1,200+</div>
+                    <div class="text-lg font-semibold mb-2">Farming Families</div>
+                    <div class="text-cream/80">Direct partnerships</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 bg-gradient-to-b from-cream to-cream/95">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="font-display text-4xl md:text-5xl font-bold text-forest mb-6 reveal">
+                Partner With Us
+            </h2>
+            <p class="text-xl text-charcoal/80 mb-8 max-w-3xl mx-auto reveal">
+                Join the growing family of businesses that trust Kembang Rempah for 
+                premium Indonesian spices and reliable service.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
+                <a href="products.html" class="bg-forest hover:bg-forest/90 text-cream px-8 py-4 rounded-full font-semibold text-lg transition-all">
+                    Explore Products
+                </a>
+                <a href="contact.html" class="border-2 border-forest text-forest hover:bg-forest hover:text-cream px-8 py-4 rounded-full font-semibold text-lg transition-all">
+                    Start Partnership
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-forest text-cream py-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="resources/new-logo.png" alt="Kembang Rempah Logo" class="w-10 h-10 rounded-full object-contain">
+                        <span class="font-display font-bold text-xl">Kembang Rempah</span>
+                    </div>
+                    <p class="text-cream/80 leading-relaxed">
+                        Indonesia's premier spice exporter, bringing the authentic flavors of the 
+                        Spice Islands to the world since 1999.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-cream/80">
+                        <li><a href="products.html" class="hover:text-gold transition-colors">Products</a></li>
+                        <li><a href="about.html" class="hover:text-gold transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-gold transition-colors">Contact</a></li>
+                        <li><a href="privacy.html" class="hover:text-gold transition-colors">Privacy Policy</a></li>
+<li><a href="terms.html" class="hover:text-gold transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-cream/80">
+                        <li>Jakarta, Indonesia</li>
+                        <li>+62 21 1234 5678</li>
+                        <li>Kembangrempah@outlook.com</li>
+                        <li>WhatsApp: +62 812 3456 7890</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Business Hours</h4>
+                    <ul class="space-y-2 text-cream/80">
+                        <li>Monday - Friday: 8:00 - 18:00</li>
+                        <li>Saturday: 9:00 - 15:00</li>
+                        <li>Sunday: Closed</li>
+                        <li>24/7 Emergency Line Available</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-cream/20 pt-8 text-center text-cream/60">
+                <p>&copy; 2025 Kembang Rempah. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script>
+        // Initialize impact chart
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartDom = document.getElementById('impact-chart');
+            if (chartDom) {
+                const myChart = echarts.init(chartDom);
+                
+                const option = {
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                        orient: 'horizontal',
+                        bottom: 0,
+                        textStyle: {
+                            color: '#2F2F2F'
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Impact Distribution',
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            center: ['50%', '45%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '18',
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            data: [
+                                {
+                                    value: 1200,
+                                    name: 'Farming Families',
+                                    itemStyle: { color: '#1B4332' }
+                                },
+                                {
+                                    value: 45,
+                                    name: 'Countries Served',
+                                    itemStyle: { color: '#B8860B' }
+                                },
+                                {
+                                    value: 15000,
+                                    name: 'Tons Exported',
+                                    itemStyle: { color: '#D2691E' }
+                                },
+                                {
+                                    value: 6,
+                                    name: 'Certifications',
+                                    itemStyle: { color: '#2F2F2F' }
+                                }
+                            ]
+                        }
+                    ]
+                };
+                
+                myChart.setOption(option);
+                
+                // Responsive chart
+                window.addEventListener('resize', function() {
+                    myChart.resize();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

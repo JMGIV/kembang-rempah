@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Indonesian Spices - Kembang Rempah</title>
+    <meta name="description" content="Browse our complete catalog of premium Indonesian spices. Filter by type, origin, and quality grade. Request bulk quotes for export.">
+    
+    <!-- index.html -->
+<meta property="og:title" content="Kembang Rempah - Premium Indonesian Spice Exporter">
+<meta property="og:description" content="Direct sourcing from Indonesia's legendary Spice Islands. ISO 22000 certified. Export to 45+ countries.">
+<meta property="og:image" content="https://kembangrempah.com/resources/hero-spices.jpg">
+<meta property="og:url" content="https://kembangrempah.com/">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Add to all other pages with appropriate titles/descriptions -->
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': '#1B4332',
+                        'terracotta': '#D2691E',
+                        'gold': '#B8860B',
+                        'cream': '#F5F5DC',
+                        'charcoal': '#2F2F2F'
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'body': ['Inter', 'sans-serif'],
+                        'accent': ['Crimson Text', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom styles */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .reveal.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .product-card {
+            background: rgba(245, 245, 220, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(27, 67, 50, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .filter-panel {
+            background: rgba(245, 245, 220, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quote-panel {
+            background: rgba(245, 245, 220, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 100px;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .qty-btn {
+            background: #f3f4f6;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .qty-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .quantity-selector input {
+            border: none;
+            text-align: center;
+            width: 60px;
+            padding: 8px;
+            outline: none;
+        }
+        
+        .filter-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-checkbox:checked {
+            background: #B8860B;
+            border-color: #B8860B;
+        }
+        
+        .filter-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .price-range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+        }
+        
+        .price-range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #B8860B;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(184, 134, 11, 0.3);
+        }
+        
+        .price-range-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #B8860B;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(184, 134, 11, 0.3);
+        }
+        
+        .navigation {
+            backdrop-filter: blur(20px);
+            background: rgba(245, 245, 220, 0.9);
+            border-bottom: 1px solid rgba(27, 67, 50, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #B8860B;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .product-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        .modal-content {
+            background: #F5F5DC;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            animation: modalIn 0.3s ease forwards;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #2F2F2F;
+            z-index: 10;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        @keyframes modalIn {
+            to { transform: scale(1); }
+        }
+        
+        .success-message {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: #10B981;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .product-card:hover {
+                transform: translateY(-4px);
+            }
+            
+            .quote-panel {
+                position: static;
+                margin-top: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="font-body text-charcoal bg-cream">
+    <!-- Navigation -->
+    <nav class="navigation fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="resources/new-logo.png" alt="Kembang Rempah Logo" class="w-10 h-10 rounded-full object-contain">
+                <span class="font-display font-bold text-xl text-forest">Kembang Rempah</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="nav-link text-forest hover:text-gold transition-colors">Home</a>
+                <a href="products.html" class="nav-link text-gold">Products</a>
+                <a href="about.html" class="nav-link text-forest hover:text-gold transition-colors">About</a>
+                <a href="contact.html" class="nav-link text-forest hover:text-gold transition-colors">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="p-2 text-forest hover:text-gold transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </button>
+                <button class="mobile-menu-btn md:hidden p-2 text-forest">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu md:hidden hidden absolute top-full left-0 right-0 bg-cream border-t border-forest/10">
+            <div class="px-6 py-4 space-y-4">
+                <a href="index.html" class="block text-forest hover:text-gold transition-colors">Home</a>
+                <a href="products.html" class="block text-gold">Products</a>
+                <a href="about.html" class="block text-forest hover:text-gold transition-colors">About</a>
+                <a href="contact.html" class="block text-forest hover:text-gold transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="pt-32 pb-16 px-6 bg-gradient-to-b from-forest to-forest/90 text-cream">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center">
+                <h1 class="font-display text-5xl md:text-6xl font-bold mb-6">
+                    Premium Indonesian Spices
+                </h1>
+                <p class="text-xl md:text-2xl text-cream/90 max-w-3xl mx-auto">
+                    Discover our complete collection of authentic Indonesian spices, 
+                    sourced directly from the legendary Spice Islands.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <div class="px-6 py-4 bg-cream border-b border-forest/10">
+        <div class="max-w-7xl mx-auto">
+            <nav class="flex items-center space-x-2 text-sm">
+                <a href="index.html" class="text-forest hover:text-gold transition-colors">Home</a>
+                <span class="text-charcoal/50">/</span>
+                <span class="text-charcoal/80">Products</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <section class="py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="lg:flex lg:space-x-8">
+                <!-- Filters Sidebar -->
+                <div class="lg:w-1/4 mb-8 lg:mb-0">
+                    <div class="filter-panel p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-display text-xl font-semibold text-forest">Filters</h3>
+                            <button class="reset-filters text-sm text-gold hover:text-gold/80 transition-colors">
+                                Reset All
+                            </button>
+                        </div>
+                        
+                        <form class="filter-form space-y-6">
+                            <!-- Spice Type Filter -->
+                            <div>
+                                <h4 class="font-semibold text-forest mb-3">Spice Type</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="type" value="all" class="filter-checkbox" checked>
+                                        <span class="text-charcoal">All Types</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="type" value="cloves" class="filter-checkbox">
+                                        <span class="text-charcoal">Cloves</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="type" value="cinnamon" class="filter-checkbox">
+                                        <span class="text-charcoal">Cinnamon</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="type" value="cardamom" class="filter-checkbox">
+                                        <span class="text-charcoal">Cardamom</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="type" value="turmeric" class="filter-checkbox">
+                                        <span class="text-charcoal">Turmeric</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="type" value="nutmeg" class="filter-checkbox">
+                                        <span class="text-charcoal">Nutmeg</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="type" value="pepper" class="filter-checkbox">
+                                        <span class="text-charcoal">Pepper</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Origin Filter -->
+                            <div>
+                                <h4 class="font-semibold text-forest mb-3">Origin</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="origin" value="all" class="filter-checkbox" checked>
+                                        <span class="text-charcoal">All Regions</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="origin" value="Sumatra" class="filter-checkbox">
+                                        <span class="text-charcoal">Sumatra</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="origin" value="Java" class="filter-checkbox">
+                                        <span class="text-charcoal">Java</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="origin" value="Sulawesi" class="filter-checkbox">
+                                        <span class="text-charcoal">Sulawesi</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="origin" value="Maluku" class="filter-checkbox">
+                                        <span class="text-charcoal">Maluku</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Quality Grade Filter -->
+                            <div>
+                                <h4 class="font-semibold text-forest mb-3">Quality Grade</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="grade" value="all" class="filter-checkbox" checked>
+                                        <span class="text-charcoal">All Grades</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="grade" value="Premium" class="filter-checkbox">
+                                        <span class="text-charcoal">Premium</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="grade" value="Standard" class="filter-checkbox">
+                                        <span class="text-charcoal">Standard</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Form Filter -->
+                            <div>
+                                <h4 class="font-semibold text-forest mb-3">Form</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="form" value="all" class="filter-checkbox" checked>
+                                        <span class="text-charcoal">All Forms</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="form" value="Whole" class="filter-checkbox">
+                                        <span class="text-charcoal">Whole</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="form" value="Powder" class="filter-checkbox">
+                                        <span class="text-charcoal">Powder</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="radio" name="form" value="Chips" class="filter-checkbox">
+                                        <span class="text-charcoal">Chips</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Price Range Filter -->
+                            <div>
+                                <h4 class="font-semibold text-forest mb-3">Price Range</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm text-charcoal/70 mb-2">Min Price: $<span id="min-price-display">0</span></label>
+                                        <input type="range" name="minPrice" min="0" max="50" value="0" step="0.5" 
+                                               class="price-range-slider" id="min-price-slider">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm text-charcoal/70 mb-2">Max Price: $<span id="max-price-display">50</span></label>
+                                        <input type="range" name="maxPrice" min="0" max="50" value="50" step="0.5" 
+                                               class="price-range-slider" id="max-price-slider">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div class="lg:w-2/3">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="font-display text-2xl font-semibold text-forest">Our Products</h2>
+                            <p class="results-count text-charcoal/70 mt-1">15 products found</p>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <select class="bg-white border border-gray-300 rounded-lg px-4 py-2 text-charcoal" id="sort-select">
+                                <option value="name">Sort by Name</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="origin">Sort by Origin</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="product-grid grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <!-- Products will be rendered here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Calculator Section -->
+    <section class="py-12 px-6 bg-gradient-to-b from-cream to-cream/95">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-4xl font-bold text-forest mb-4">Bulk Order Calculator</h2>
+                <p class="text-xl text-charcoal/80 max-w-3xl mx-auto">
+                    Add products to your quote and get instant pricing with volume discounts
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="quote-panel p-6">
+                        <h3 class="font-display text-xl font-semibold text-forest mb-4">Selected Items</h3>
+                        <div class="quote-items min-h-[200px]">
+                            <p class="empty-quote text-charcoal/60 text-center py-8">No items selected</p>
+                        </div>
+                        
+                        <div class="border-t border-charcoal/20 pt-4 mt-4">
+                            <div class="flex justify-between items-center text-xl font-semibold">
+                                <span class="text-forest">Total Quote:</span>
+                                <span class="quote-total text-gold">$0.00</span>
+                            </div>
+                            
+                            <div class="mt-6 space-y-3">
+                                <button class="w-full bg-gold hover:bg-gold/90 text-cream py-3 rounded-lg font-semibold transition-colors" 
+                                        onclick="window.location.href='contact.html'">
+                                    Request Detailed Quote
+                                </button>
+                                <button class="w-full border-2 border-forest text-forest hover:bg-forest hover:text-cream py-3 rounded-lg font-semibold transition-colors" 
+                                        onclick="downloadQuote()">
+                                    Download Quote PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="bg-forest text-cream p-6 rounded-2xl">
+                        <h3 class="font-display text-xl font-semibold mb-4">Export Information</h3>
+                        
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <h4 class="font-semibold mb-2">Minimum Order</h4>
+                                <p class="text-cream/80">Most products: 50-100kg minimum</p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold mb-2">Packaging</h4>
+                                <p class="text-cream/80">Standard export packaging or custom solutions available</p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold mb-2">Shipping</h4>
+                                <p class="text-cream/80">FOB, CIF, or CFR terms available</p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold mb-2">Lead Time</h4>
+                                <p class="text-cream/80">7-21 days depending on order size and destination</p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold mb-2">Payment Terms</h4>
+                                <p class="text-cream/80">T/T or L/C accepted</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-cream/20">
+                            <p class="text-xs text-cream/60">
+                                * Prices are subject to change based on market conditions and order volume.
+                                Contact us for the most current pricing and availability.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-forest text-cream py-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="resources/new-logo.png" alt="Kembang Rempah Logo" class="w-10 h-10 rounded-full object-contain">
+                        <span class="font-display font-bold text-xl">Kembang Rempah</span>
+                    </div>
+                    <p class="text-cream/80 leading-relaxed">
+                        Indonesia's premier spice exporter, bringing the authentic flavors of the 
+                        Spice Islands to the world since 1999.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-cream/80">
+                        <li><a href="products.html" class="hover:text-gold transition-colors">Products</a></li>
+                        <li><a href="about.html" class="hover:text-gold transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-gold transition-colors">Contact</a></li>
+                        <li><a href="privacy.html" class="hover:text-gold transition-colors">Privacy Policy</a></li>
+<li><a href="terms.html" class="hover:text-gold transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-cream/80">
+                        <li>Jakarta, Indonesia</li>
+                        <li>+62 21 1234 5678</li>
+                        <li>Kembangrempah@outlook.com</li>
+                        <li>WhatsApp: +62 812 3456 7890</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Business Hours</h4>
+                    <ul class="space-y-2 text-cream/80">
+                        <li>Monday - Friday: 8:00 - 18:00</li>
+                        <li>Saturday: 9:00 - 15:00</li>
+                        <li>Sunday: Closed</li>
+                        <li>24/7 Emergency Line Available</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-cream/20 pt-8 text-center text-cream/60">
+                <p>&copy; 2025 Kembang Rempah. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script>
+        // Additional products page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Price range sliders
+            const minPriceSlider = document.getElementById('min-price-slider');
+            const maxPriceSlider = document.getElementById('max-price-slider');
+            const minPriceDisplay = document.getElementById('min-price-display');
+            const maxPriceDisplay = document.getElementById('max-price-display');
+            
+            minPriceSlider.addEventListener('input', function() {
+                minPriceDisplay.textContent = this.value;
+                if (parseFloat(this.value) > parseFloat(maxPriceSlider.value)) {
+                    maxPriceSlider.value = this.value;
+                    maxPriceDisplay.textContent = this.value;
+                }
+            });
+            
+            maxPriceSlider.addEventListener('input', function() {
+                maxPriceDisplay.textContent = this.value;
+                if (parseFloat(this.value) < parseFloat(minPriceSlider.value)) {
+                    minPriceSlider.value = this.value;
+                    minPriceDisplay.textContent = this.value;
+                }
+            });
+            
+            // Sort functionality
+            const sortSelect = document.getElementById('sort-select');
+            sortSelect.addEventListener('change', function() {
+                // Sorting logic would be implemented here
+                console.log('Sort by:', this.value);
+            });
+        });
+        
+        // Download quote function
+        function downloadQuote() {
+            if (selectedSpices.length === 0) {
+                alert('Please add items to your quote first.');
+                return;
+            }
+            
+            // Simulate PDF generation
+            const quoteData = {
+                items: selectedSpices,
+                total: totalQuote,
+                date: new Date().toLocaleDateString(),
+                company: 'Kembang Rempah'
+            };
+            
+            console.log('Quote Data:', quoteData);
+            alert('Quote PDF would be generated and downloaded. This is a demo functionality.');
+        }
+    </script>
+</body>
+</html>

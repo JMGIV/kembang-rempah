@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /resources/certificates/private/
+
+Sitemap: https://kembangrempah.com/sitemap.xml
